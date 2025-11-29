@@ -19,7 +19,6 @@ const val seperationRadius: Double = size * 6
 const val avoidFactor: Double = 0.05
 const val matchingFactor: Double = 0.05
 const val centeringFactor: Double = 0.0005
-const val margin: Double = size * 2
 
 class Boid(_pos: Vector2) {
     var position: Vector2 = _pos
