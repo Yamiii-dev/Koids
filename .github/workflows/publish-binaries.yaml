@@ -45,7 +45,7 @@ jobs:
         if: matrix.os == 'windows-latest'
 
       - name: Rename jpackage zip
-        run: mv ./build/distributions/openrndr-application.zip ./build/distributions/openrndr-application-${{env.OR_TARGET_NAME}}.zip
+        run: mv ./build/distributions/koids.zip ./build/distributions/koids-${{env.OR_TARGET_NAME}}.zip
 
       - name: Create Release
         uses: ncipollo/release-action@v1.14.0
@@ -55,5 +55,5 @@ jobs:
           allowUpdates: true
           replacesArtifacts: false
           body: Fully automated release
-          artifacts: "./build/distributions/openrndr-application-${{env.OR_TARGET_NAME}}.zip"
+          artifacts: "./build/distributions/koids-${{env.OR_TARGET_NAME}}.zip"
 
