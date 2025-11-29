@@ -4,7 +4,6 @@ import org.openrndr.KEY_SPACEBAR
 import org.openrndr.MouseButton
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.loadFont
 import org.openrndr.extra.color.colormatrix.tint
 import org.openrndr.shape.Circle
 import org.openrndr.shape.contour
@@ -67,7 +66,7 @@ fun main() = application {
             //drawer.circle(sin(seconds * 100) * width / 2.0 + width / 2.0, sin(0.5 * seconds) * height / 2.0 + height / 2.0, 140.0)
             for(boid in boids){
                 boid.Update(deltaTime)
-                boid.Draw(drawer, deltaTime)
+                boid.Draw(drawer)
             }
             for(avoid in avoids){
                 drawer.fill = ColorRGBa.BLUE
