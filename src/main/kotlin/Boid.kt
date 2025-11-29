@@ -1,18 +1,12 @@
-import org.openrndr.color.ColorHSLa
 import org.openrndr.color.ColorHSVa
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.math.Vector2
 import org.openrndr.math.clamp
 import org.openrndr.math.transforms.transform
-import org.openrndr.panel.style.Color
-import org.openrndr.panel.style.Position
 import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.contour
-import java.nio.DoubleBuffer
-import javax.swing.GroupLayout
 import kotlin.math.PI
-import kotlin.math.absoluteValue
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -31,9 +25,10 @@ class Boid(_pos: Vector2) {
     var position: Vector2 = _pos
     var rotation: Double = Random.nextDouble(0.0, 360.0)
     var friendCount: Int = 0
+    var currentColor = ColorRGBa.RED
 
     fun Draw(drawer: Drawer, deltaTime: Double){
-        drawer.fill = GroupColor()
+        drawer.fill = currentColor
         drawer.contour(CreateRectangle().transform(transform {
             translate(position)
             rotate(rotation)
@@ -81,6 +76,11 @@ class Boid(_pos: Vector2) {
     }
 
     fun Update(deltaTime: Double){
+        val color = GroupColor()
+        val red = lerp(currentColor.r, color.r, deltaTime * 2)
+        val green = lerp(currentColor.g, color.g, deltaTime * 2)
+        val blue = lerp(currentColor.b, color.b, deltaTime * 2)
+        currentColor = ColorRGBa(red, green, blue)
         friendCount = GetFriends(groupRadius).size
         val angle = Math.toRadians(rotation)
         var dir = Vector2(cos(angle), sin(angle))
@@ -115,7 +115,7 @@ class Boid(_pos: Vector2) {
             val boidDiff = position - avoid.position
             diff += boidDiff
         }
-        return dir + (diff.normalized * (avoidFactor * 1.5))
+        return dir + (diff.normalized * (avoidFactor * 3))
     }
 
     fun Alignment(dir: Vector2): Vector2{

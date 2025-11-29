@@ -1,13 +1,13 @@
+import org.openrndr.KEY_ENTER
+import org.openrndr.KEY_ESCAPE
+import org.openrndr.KEY_SPACEBAR
 import org.openrndr.MouseButton
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.loadFont
-import org.openrndr.draw.loadImage
 import org.openrndr.extra.color.colormatrix.tint
-import org.openrndr.shape.Rectangle
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
+import org.openrndr.shape.Circle
+import org.openrndr.shape.contour
 
 val screenWidth = 1280
 val screenHeight = 720
@@ -28,6 +28,29 @@ fun main() = application {
                 boids.add(Boid(it.position))
             if(it.button == MouseButton.RIGHT)
                 avoids.add(Avoid(it.position))
+        }
+
+        keyboard.keyDown.listen {
+            if(it.key == KEY_SPACEBAR){
+                val c1 = Circle(width.toDouble() / 2, height.toDouble() / 2, 200.0).contour
+                val points = c1.equidistantPositions(150)
+                for(point in points) avoids.add(Avoid(point))
+            }
+            if(it.key == KEY_ESCAPE){
+                avoids.clear()
+            }
+            if(it.key == KEY_ENTER){
+                val c1 = contour {
+                    moveTo(0.0, 0.0)
+                    lineTo(width.toDouble(), 0.0)
+                }
+                val c2 = contour {
+                    moveTo(0.0, height.toDouble())
+                    lineTo(width.toDouble(), height.toDouble())
+                }
+                val points = c1.equidistantPositions(150) + c2.equidistantPositions(150)
+                for(point in points) avoids.add(Avoid(point))
+            }
         }
         var previousUpdate = 0.0
         var currentUpdate = 0.0
