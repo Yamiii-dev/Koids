@@ -27,7 +27,7 @@ class Boid(_pos: Vector2) {
     var friendCount: Int = 0
     var currentColor = ColorRGBa.RED
 
-    fun Draw(drawer: Drawer, deltaTime: Double){
+    fun Draw(drawer: Drawer){
         drawer.fill = currentColor
         drawer.contour(CreateRectangle().transform(transform {
             translate(position)
@@ -111,7 +111,6 @@ class Boid(_pos: Vector2) {
         val friends = GetAvoids(seperationRadius)
         var diff = Vector2.ZERO
         for(avoid in friends){
-            if(avoid == this) continue
             val boidDiff = position - avoid.position
             diff += boidDiff
         }
@@ -176,21 +175,10 @@ class Boid(_pos: Vector2) {
         return friends
     }
 
-    fun GetFriends(radius: Double, boids: List<Boid>): List<Boid> {
-        val friends = mutableListOf<Boid>()
-        for(boid in boids){
-            if(boid == this) continue
-            if(position.distanceTo(boid.position) < radius){
-                friends.add(boid)
-            }
-        }
-        return friends
-    }
 
     fun GetAvoids(radius: Double): List<Avoid> {
         val friends = mutableListOf<Avoid>()
         for(avoid in avoids){
-            if(avoid == this) continue
             if(position.distanceTo(avoid.position) < radius){
                 friends.add(avoid)
             }

@@ -22,7 +22,6 @@ fun main() = application {
     }
 
     program {
-        val font = loadFont("data/fonts/default.otf", 64.0)
         mouse.buttonDown.listen {
             if(it.button == MouseButton.LEFT)
                 boids.add(Boid(it.position))
@@ -52,7 +51,7 @@ fun main() = application {
                 for(point in points) avoids.add(Avoid(point))
             }
         }
-        var previousUpdate = 0.0
+        var previousUpdate: Double
         var currentUpdate = 0.0
         extend {
             previousUpdate = currentUpdate
