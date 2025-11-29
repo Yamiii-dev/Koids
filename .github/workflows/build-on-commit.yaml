@@ -2,7 +2,7 @@ name: Build on commit
 on:
   push:
     branches:
-      - master
+      - main
       - next-version
 jobs:
   build:
@@ -17,5 +17,5 @@ jobs:
           #cache: 'gradle'
 
       - name: Build sources
-        run: ./gradlew build
+        run: sudo chmod +X ./gradlew && ./gradlew build
 
