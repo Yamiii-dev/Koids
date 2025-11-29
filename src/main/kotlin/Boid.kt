@@ -3,6 +3,7 @@ import org.openrndr.color.ColorHSVa
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.math.Vector2
+import org.openrndr.math.clamp
 import org.openrndr.math.transforms.transform
 import org.openrndr.panel.style.Color
 import org.openrndr.panel.style.Position
@@ -30,13 +31,8 @@ class Boid(_pos: Vector2) {
     var position: Vector2 = _pos
     var rotation: Double = Random.nextDouble(0.0, 360.0)
     var friendCount: Int = 0
-    var currentColor: ColorRGBa = ColorRGBa.RED
 
     fun Draw(drawer: Drawer, deltaTime: Double){
-        val red = lerp(currentColor.r, GroupColor().r, deltaTime)
-        val green = lerp(currentColor.g, GroupColor().g, deltaTime)
-        val blue = lerp(currentColor.b, GroupColor().b, deltaTime)
-        currentColor = GroupColor()
         drawer.fill = GroupColor()
         drawer.contour(CreateRectangle().transform(transform {
             translate(position)
@@ -44,10 +40,35 @@ class Boid(_pos: Vector2) {
         }))
     }
 
+    fun CollectFlock(
+        visited: MutableSet<Boid>,
+        neighborsCache: Map<Boid, List<Boid>>
+    ) {
+        val friends = neighborsCache[this] ?: emptyList()
+
+        for (boid in friends) {
+            if (boid !in visited) {
+                visited.add(boid)
+                boid.CollectFlock(visited, neighborsCache)
+            }
+        }
+    }
+
+    fun GetFlock(): Set<Boid> {
+        val neighborsCache = boids.associateWith { it.GetFriends(groupRadius) }
+
+        val visited = mutableSetOf<Boid>()
+        visited.add(this)
+
+        this.CollectFlock(visited, neighborsCache)
+
+        return visited
+    }
+
     fun GroupColor(): ColorRGBa {
-        val transition = GetFriends(groupRadius * 2).size / 30.0
-        println(transition)
-        return ColorHSLa(transition * 360, 1.0, 0.5).toRGBa()
+        var transition = GetFlock().size / 50.0
+        transition = transition.clamp(0.0, 1.0)
+        return ColorHSVa(transition * 360, 1.0, 1.0).toRGBa()
     }
 
     fun CreateRectangle(): ShapeContour{
