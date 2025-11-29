@@ -201,9 +201,9 @@ tasks {
     named<org.beryx.runtime.JPackageTask>("jpackage") {
         doLast {
             val destPath = if (OperatingSystem.current().isMacOsX)
-                "build/jpackage/openrndr-application.app/Contents/Resources/data"
+                "build/jpackage/koids.app/Contents/Resources/data"
             else
-                "build/jpackage/openrndr-application/data"
+                "build/jpackage/koids/data"
 
             copy {
                 from("data") { include("**/*") }
@@ -213,7 +213,7 @@ tasks {
     }
 
     register<Zip>("jpackageZip") {
-        archiveFileName = "openrndr-application.zip"
+        archiveFileName = "koids.zip"
         from("${layout.buildDirectory.get()}/jpackage") {
             include("**/*")
         }
@@ -223,7 +223,7 @@ tasks {
 
 runtime {
     jpackage {
-        imageName = "openrndr-application"
+        imageName = "koids"
         skipInstaller = true
         if (OperatingSystem.current().isMacOsX) {
             jvmArgs.add("-XstartOnFirstThread")
