@@ -143,19 +143,6 @@ class Boid(_pos: Vector2) {
         return dir + newDir
     }
 
-    fun RunFromEdge(dir: Vector2): Vector2{
-        var newDir = dir
-        if(position.x < margin)
-            newDir = Vector2(newDir.x + 0.4, newDir.y)
-        else if(position.x > screenWidth - margin)
-            newDir = Vector2(newDir.x - 0.4, newDir.y)
-        if(position.y < margin)
-            newDir = Vector2(newDir.x, newDir.y + 0.4)
-        else if(position.y > screenHeight - margin)
-            newDir = Vector2(newDir.x, newDir.y - 0.4)
-        return newDir
-    }
-
     fun Wraparound(){
         position = Vector2(position.x % (screenWidth + size), position.y % (screenHeight + size))
         if(position.x < -size)
