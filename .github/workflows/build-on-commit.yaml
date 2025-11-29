@@ -17,5 +17,5 @@ jobs:
           #cache: 'gradle'
 
       - name: Build sources
-        run: ./gradlew build
+        run: chmod +X ./gradlew && ./gradlew build
 
