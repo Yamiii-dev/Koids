@@ -20,6 +20,14 @@ const val avoidFactor: Double = 0.05
 const val matchingFactor: Double = 0.05
 const val centeringFactor: Double = 0.0005
 
+data class Settings(
+    var separation: Boolean = true,
+    var alignment: Boolean = true,
+    var cohesion: Boolean = true
+)
+
+var settings = Settings()
+
 class Boid(_pos: Vector2) {
     var position: Vector2 = _pos
     var rotation: Double = Random.nextDouble(0.0, 360.0)
@@ -83,9 +91,9 @@ class Boid(_pos: Vector2) {
         friendCount = GetFriends(groupRadius).size
         val angle = Math.toRadians(rotation)
         var dir = Vector2(cos(angle), sin(angle))
-        dir = Seperation(dir)
-        dir = Alignment(dir)
-        dir = Cohesion(dir)
+        if(settings.separation )dir = Seperation(dir)
+        if(settings.alignment) dir = Alignment(dir)
+        if(settings.cohesion) dir = Cohesion(dir)
         //dir = RunFromEdge(dir)
         val newPos = position + (dir * speed * deltaTime)
         position = newPos

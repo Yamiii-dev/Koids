@@ -5,11 +5,16 @@ import org.openrndr.MouseButton
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.color.colormatrix.tint
+import org.openrndr.panel.ControlManager
+import org.openrndr.panel.elements.button
+import org.openrndr.panel.elements.clicked
+import org.openrndr.panel.elements.div
+import org.openrndr.panel.layout
 import org.openrndr.shape.Circle
 import org.openrndr.shape.contour
 
-val screenWidth = 1280
-val screenHeight = 720
+const val screenWidth = 1280
+const val screenHeight = 720
 
 var boids = mutableListOf<Boid>()
 var avoids = mutableListOf<Avoid>()
@@ -53,6 +58,7 @@ fun main() = application {
         var previousUpdate: Double
         var currentUpdate = 0.0
         extend {
+
             previousUpdate = currentUpdate
             currentUpdate = seconds
 
@@ -73,6 +79,33 @@ fun main() = application {
                 drawer.circle(avoid.position, size)
             }
 
+        }
+        extend(ControlManager()){
+            layout {
+                div {
+                    button {
+                        label = "Separation" + if(settings.separation) "(enabled)" else "(disabled)"
+                        clicked {
+                            settings.separation = !settings.separation
+                            label = "Separation" + if(settings.separation) "(enabled)" else "(disabled)"
+                        }
+                    }
+                    button {
+                        label = "Alignment" + if(settings.alignment) "(enabled)" else "(disabled)"
+                        clicked {
+                            settings.alignment = !settings.alignment
+                            label = "Aligment" + if(settings.alignment) "(enabled)" else "(disabled)"
+                        }
+                    }
+                    button {
+                        label = "Cohesion" + if(settings.cohesion) "(enabled)" else "(disabled)"
+                        clicked {
+                            settings.cohesion = !settings.cohesion
+                            label = "Cohesion" + if(settings.cohesion) "(enabled)" else "(disabled)"
+                        }
+                    }
+                }
+            }
         }
     }
 }
